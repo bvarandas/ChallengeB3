@@ -2,6 +2,7 @@ using ChallengeB3.Api.Producer;
 using ChallengeB3.Domain.Extesions;
 using ChallengeB3.Domain.Interfaces;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.AspNetCore.WebHooks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,14 +13,17 @@ var config = new ConfigurationBuilder()
             .Build();
 
 // Add services to the container.
+builder.Services
+    .AddControllers()
+    .AddWebHooks();
 
-builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddAppConfiguration(config);
 builder.Services.AddSingleton<IQueueProducer, QueueProducer>();
+//builder.Services.
 
 var app = builder.Build();
 

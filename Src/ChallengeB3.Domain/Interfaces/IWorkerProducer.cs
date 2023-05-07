@@ -1,8 +1,7 @@
 ﻿using ChallengeB3.Domain.Models;
-
 namespace ChallengeB3.Domain.Interfaces;
 
-public interface IQueueProducer
+public interface IWorkerProducer
 {
     Task PublishMessage(Register message);
 }

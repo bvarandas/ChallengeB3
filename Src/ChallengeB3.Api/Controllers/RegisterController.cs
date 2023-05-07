@@ -17,6 +17,22 @@ public class RegisterController : ControllerBase
 
     }
 
+    [HttpDelete]
+    public IActionResult DeleteRegister(int registerID)
+    {
+        try
+        {
+            //_queueProducer.PublishMessage(register);
+
+            return Accepted();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"{ex.Message}");
+            return BadRequest(ex);
+        }
+    }
+
     [HttpPost]
     public IActionResult InsertRegister(Register register)
     {
@@ -33,7 +49,24 @@ public class RegisterController : ControllerBase
 		}
     }
 
-	[HttpGet]
+
+    [HttpPut]
+    public IActionResult UpdateRegister(Register register)
+    {
+        try
+        {
+            _queueProducer.PublishMessage(register);
+
+            return Accepted(register);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"{ex.Message}");
+            return BadRequest(ex);
+        }
+    }
+
+    [HttpGet]
 	public IActionResult GetListRegister()
 	{
 		try
@@ -48,4 +81,21 @@ public class RegisterController : ControllerBase
             return BadRequest(ex);
         }
 	}
+
+
+    [HttpGet]
+    public IActionResult GetRegister(int RegisterId)
+    {
+        try
+        {
+            return Accepted(new List<Register> { });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"{ex.Message}");
+            return BadRequest(ex);
+        }
+    }
+
+
 }
