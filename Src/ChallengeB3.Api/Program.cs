@@ -3,6 +3,7 @@ using ChallengeB3.Domain.Extesions;
 using ChallengeB3.Domain.Interfaces;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.WebHooks;
+using ProtoBuf.Meta;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,7 @@ var config = new ConfigurationBuilder()
 
 // Add services to the container.
 builder.Services
+    .AddCors()
     .AddControllers()
     .AddWebHooks();
 
@@ -23,7 +25,9 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddAppConfiguration(config);
 builder.Services.AddSingleton<IQueueProducer, QueueProducer>();
-//builder.Services.
+
+
+
 
 var app = builder.Build();
 
@@ -33,6 +37,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(options => { 
+    options
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader(); 
+});
 
 app.UseAuthorization();
 

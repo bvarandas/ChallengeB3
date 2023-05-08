@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="MediatR" Version="12.0.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
     <PackageReference Include="RabbitMQ.Client" Version="6.5.0" />
@@ -18,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ChallengeB3.Application\ChallengeB3.Application.csproj" />
     <ProjectReference Include="..\ChallengeB3.Domain\ChallengeB3.Domain.csproj" />
   </ItemGroup>
 </Project>

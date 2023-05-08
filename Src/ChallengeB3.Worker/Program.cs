@@ -3,7 +3,8 @@ using System.Runtime.CompilerServices;
 using ChallengeB3.Domain.Extesions;
 using ChallengeB3.Domain.Interfaces;
 using ChallengeB3.Worker.Consumer.Workers;
-
+using ChallengeB3.Application.AutoMapper;
+using ChallengeB3.Queue.Worker.Configurations;
 
 var config = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
@@ -26,6 +27,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddHostedService<WorkerProducer>();
         
         services.AddSingleton<IWorkerProducer, WorkerProducer>();
+        services.AddAutoMapperSetup();
     })
     .Build();
 
