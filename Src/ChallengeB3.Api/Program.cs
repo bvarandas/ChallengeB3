@@ -4,6 +4,7 @@ using ChallengeB3.Domain.Interfaces;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.WebHooks;
 using ProtoBuf.Meta;
+using ChallengeB3.Infra.CrossCutting.Ioc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,8 +27,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAppConfiguration(config);
 builder.Services.AddSingleton<IQueueProducer, QueueProducer>();
 
-
-
+NativeInjectorBootStrapper.RegisterServices(builder.Services);
 
 var app = builder.Build();
 

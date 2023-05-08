@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ChallengeB3.Application\ChallengeB3.Application.csproj" />
-    <ProjectReference Include="..\ChallengeB3.Domain\ChallengeB3.Domain.csproj" />
+    <ProjectReference Include="..\ChallengeB3.Infra.CrossCutting.Bus\ChallengeB3.Infra.CrossCutting.Bus.csproj" />
+    <ProjectReference Include="..\ChallengeB3.Infra.CrossCutting.Ioc\ChallengeB3.Infra.CrossCutting.Ioc.csproj" />
   </ItemGroup>
 </Project>

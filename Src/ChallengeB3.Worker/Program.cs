@@ -5,6 +5,7 @@ using ChallengeB3.Domain.Interfaces;
 using ChallengeB3.Worker.Consumer.Workers;
 using ChallengeB3.Application.AutoMapper;
 using ChallengeB3.Queue.Worker.Configurations;
+using ChallengeB3.Infra.CrossCutting.Ioc;
 
 var config = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
@@ -28,6 +29,8 @@ IHost host = Host.CreateDefaultBuilder(args)
         
         services.AddSingleton<IWorkerProducer, WorkerProducer>();
         services.AddAutoMapperSetup();
+
+        NativeInjectorBootStrapper.RegisterServices(services);
     })
     .Build();
 
