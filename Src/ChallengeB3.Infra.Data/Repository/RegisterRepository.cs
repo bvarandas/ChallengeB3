@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ChallengeB3.Infra.Data.Repository;
 
-public class RegisterRepository<TEntity> : IRegisterRepository
+public class RegisterRepository: IRegisterRepository
 {
     protected readonly DbContextClass _dbContext;
     

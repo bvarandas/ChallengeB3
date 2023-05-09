@@ -83,8 +83,8 @@ public class RegisterController : ControllerBase
 	}
 
 
-    [HttpGet]
-    public IActionResult GetRegister(int RegisterId)
+    [HttpGet("{registerId}")]
+    public IActionResult GetRegister(int registerId)
     {
         try
         {

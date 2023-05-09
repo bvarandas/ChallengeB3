@@ -1,6 +1,8 @@
-﻿using ChallengeB3.Domain.Extesions;
+﻿using ChallengeB3.Api.Hubs;
+using ChallengeB3.Domain.Extesions;
 using ChallengeB3.Domain.Interfaces;
 using ChallengeB3.Domain.Models;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -14,7 +16,11 @@ namespace ChallengeB3.Api.Producer
         private readonly ConnectionFactory _factory;
         private readonly IConnection _connection;
         private readonly IModel _channel;
-        public QueueConsumer(IOptions<QueueEventSettings> queueSettings, ILogger<QueueConsumer> logger)
+        private readonly IServiceProvider _serviceProvider;
+        public QueueConsumer(
+            IOptions<QueueEventSettings> queueSettings, 
+            ILogger<QueueConsumer> logger,
+            IServiceProvider provider)
         {
             _logger = logger;
             _queueSettings = queueSettings.Value;
@@ -24,6 +30,7 @@ namespace ChallengeB3.Api.Producer
             };
             _connection = _factory.CreateConnection();
             _channel = _connection.CreateModel();
+            _serviceProvider = provider;
         }
 
         public async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -50,6 +57,13 @@ namespace ChallengeB3.Api.Producer
                 var message = e.Body.ToArray().DeserializeFromByteArrayProtobuf<Register>();
                 _logger.LogInformation($"{message.Description} | {message.Status} | {message.Date}");
 
+                using (var scope = _serviceProvider.CreateScope())
+                {
+                    var hubContext = scope.ServiceProvider
+                        .GetRequiredService<IHubContext<BrokerHub>>();
+
+                    hubContext.Clients.Group("CrudMessage").SendAsync("ReceiveMessage", message);
+                }
 
                 _channel.BasicAck(e.DeliveryTag, false);
 

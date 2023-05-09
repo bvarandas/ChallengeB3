@@ -13,6 +13,7 @@ using ChallengeB3.Infra.Data.EventSourcing;
 using ChallengeB3.Infra.Data.Repository.EventSourcing;
 using ChallengeB3.Domain.CommandHandlers;
 using ChallengeB3.Domain.Commands;
+using ChallengeB3.Infra.Data.Repository;
 
 namespace ChallengeB3.Infra.CrossCutting.Ioc;
 
@@ -22,7 +23,7 @@ public class NativeInjectorBootStrapper
     {
         // Asp .NET HttpContext dependency
         //services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
+        
         // Domain Bus (Mediator)
         services.AddScoped<IMediatorHandler, InMemoryBus>();
 
@@ -42,7 +43,7 @@ public class NativeInjectorBootStrapper
         services.AddScoped<IRequestHandler<RemoveRegisterCommand, bool>, RegisterCommandHandler>();
 
         // Infra - Data
-        services.AddScoped<IRegisterRepository, IRegisterRepository>();
+        services.AddScoped<IRegisterRepository, RegisterRepository>();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<DbContextClass>();
@@ -51,6 +52,5 @@ public class NativeInjectorBootStrapper
         services.AddScoped<IEventStoreRepository, EventStoreSQLRepository>();
         services.AddScoped<IEventStore, SqlEventStore>();
         services.AddScoped<EventStoreSqlContext>();
-
     }
 }

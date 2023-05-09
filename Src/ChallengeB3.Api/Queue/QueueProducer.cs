@@ -14,11 +14,19 @@ public class QueueProducer : IQueueProducer
     private readonly ILogger<QueueProducer> _logger;
     public QueueProducer(IOptions<QueueCommandSettings> queueSettings, ILogger<QueueProducer> logger)
     {
+
         _logger = logger;
         _queueSettings = queueSettings.Value;
-        _factory = new ConnectionFactory { HostName = _queueSettings.HostName };
-        _connection = _factory.CreateConnection();
-        _channel = _connection.CreateModel();
+        try
+        {
+            _factory = new ConnectionFactory { HostName = _queueSettings.HostName };
+            _connection = _factory.CreateConnection();
+            _channel = _connection.CreateModel();
+        }
+        catch (Exception ex) 
+        {
+            _logger.LogError(ex, ex.Message);
+        }
     }
 
     public Task PublishMessage(Register message)

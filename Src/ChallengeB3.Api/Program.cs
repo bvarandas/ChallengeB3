@@ -2,9 +2,12 @@ using ChallengeB3.Api.Producer;
 using ChallengeB3.Domain.Extesions;
 using ChallengeB3.Domain.Interfaces;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.AspNetCore.WebHooks;
 using ProtoBuf.Meta;
 using ChallengeB3.Infra.CrossCutting.Ioc;
+using Microsoft.AspNetCore.SignalR;
+using ChallengeB3.Api.Hubs;
+using ChallengeB3.Queue.Worker.Configurations;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,10 +18,9 @@ var config = new ConfigurationBuilder()
             .Build();
 
 // Add services to the container.
-builder.Services
-    .AddCors()
-    .AddControllers()
-    .AddWebHooks();
+//builder.Services
+    //.AddCors()
+    //.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -27,7 +29,40 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAppConfiguration(config);
 builder.Services.AddSingleton<IQueueProducer, QueueProducer>();
 
+//SignalR - Core
+//builder.Services.AddSignalRCore();
+
+//SignalR
+builder.Services.AddSignalR();
+
+// automapper
+builder.Services.AddAutoMapperSetup();
+
+// Asp .NET HttpContext dependency
+builder.Services.AddHttpContextAccessor();
+
+// Mediator
+builder.Services.AddMediatR(cfg=> 
+{
+    cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()); 
+});
+
 NativeInjectorBootStrapper.RegisterServices(builder.Services);
+
+builder.Services.AddCors(options => options.AddPolicy("CorsPolicy", builderc =>
+{
+    builderc
+    .AllowAnyHeader()
+    .AllowAnyMethod()
+    //.AllowAnyOrigin()
+    .SetIsOriginAllowed((host) => true)
+    .AllowCredentials();
+    
+    //.SetIsOriginAllowed((host) => true)
+    
+}));
+
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
@@ -38,14 +73,23 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors(options => { 
-    options
-    .AllowAnyOrigin()
-    .AllowAnyMethod()
-    .AllowAnyHeader(); 
-});
+//app.UseCors(options => options.AddPolicy( { 
+//    options
+//    .AllowAnyOrigin()
+//    .SetIsOriginAllowed((host)=> true)
+//    .AllowAnyMethod()
+//    .AllowAnyHeader(); 
 
-app.UseAuthorization();
+
+//});
+
+
+
+app.UseCors("CorsPolicy");
+
+app.MapHub<BrokerHub>("/hubs/brokerhub");
+
+//app.UseAuthorization();
 
 app.MapControllers();
 

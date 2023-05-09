@@ -8,7 +8,8 @@ public static class ConfigServiceCollectionExtensions
 {
     public static IServiceCollection AddAppConfiguration(this IServiceCollection services, IConfiguration config)
     {
-        services.Configure<QueueSettings>(config.GetSection(nameof(QueueSettings)));
+        services.Configure<QueueCommandSettings>(config.GetSection(nameof(QueueCommandSettings)));
+        services.Configure<QueueEventSettings>(config.GetSection(nameof(QueueEventSettings)));
 
         return services;
     }
