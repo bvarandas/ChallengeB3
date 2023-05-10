@@ -25,6 +25,7 @@ Ioc - Inversão de controle
 CQRS - com Coreografia
 Injeção de depedencia
 Unit of Work
+Event Sourcing
 Alguns conceitos de solid tbm foram usados.
 
 Rodar o docker do rabbitMQ
