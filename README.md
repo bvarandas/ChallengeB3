@@ -31,6 +31,6 @@ Rodar o docker do rabbitMQ
 
 docker run -d --hostname rabbitserver --name rabbitmq-server -p 15672:15672 -p 5672:5672 rabbitmq:3-management
 
-ROdas o docker do MSSQL
+ROdar o docker do MSSQL
 
 docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=<guest@guest>" -p 1433:1433 --name sql1 --hostname sql1 -d  mcr.microsoft.com/mssql/server:2022-latest
