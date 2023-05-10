@@ -35,3 +35,13 @@ docker run -d --hostname rabbitserver --name rabbitmq-server -p 15672:15672 -p 5
 ROdar o docker do MSSQL
 
 docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=<guest@guest>" -p 1433:1433 --name sql1 --hostname sql1 -d  mcr.microsoft.com/mssql/server:2022-latest
+
+
+![image](https://github.com/bvarandas/ChallengeB3/assets/13907905/ce855aa1-63b9-45f5-9b43-12ea7ad95afb)
+
+![image](https://github.com/bvarandas/ChallengeB3/assets/13907905/4a69d490-3858-40e6-aaa6-1ec93e4b503e)
+
+![image](https://github.com/bvarandas/ChallengeB3/assets/13907905/69ecb338-71f1-402b-a888-ca63a7b3055a)
+
+
+
