@@ -1,7 +1,8 @@
 # ChallengeB3
 Projeto de desafio porposto pelo time desenvolvimento da B3.
 
-Projeto se propoe a fazer umcrud com patterns de mercado e mecanismos usados em soluções no mercado de capitais.
+Projeto se propoe a fazer um crud com patterns de mercado e mecanismos usados em soluções no mercado de capitais, 
+como mesageria e bibliotecas de compressão de dados para camada de transporte como protobuf.
 
 Arquitetura - Message/Event Driven e DDD
 Command-> Event
