@@ -21,19 +21,23 @@ public sealed class Register
     [ProtoMember(4)]
     public DateTime Date { get; set; }
 
-    public Register(int registerId, string description, string status, DateTime date)
+    public string Action { get; set; } =string.Empty;
+
+    public Register(int registerId, string description, string status, DateTime date, string action)
     {
         RegisterId = registerId;
         Description = description;
         Status = status;
         Date = date;
+        Action = action;
     }
 
-    public Register(string description, string status, DateTime date)
+    public Register(string description, string status, DateTime date, string action)
     {
         Description = description;
         Status = status;
         Date = date;
+        Action = action;
     }
 
     public Register() { }

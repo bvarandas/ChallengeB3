@@ -1,4 +1,4 @@
-﻿namespace ChallengeB3.Application.EventSourceNormalizes;
+﻿namespace ChallengeB3.Domain.Models;
 
 public class RegisterHistoryData
 {

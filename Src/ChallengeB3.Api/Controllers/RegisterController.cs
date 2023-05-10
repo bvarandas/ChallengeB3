@@ -1,6 +1,7 @@
 ﻿using ChallengeB3.Domain.Interfaces;
 using ChallengeB3.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace ChallengeB3.Api.Controllers;
 
@@ -10,19 +11,21 @@ public class RegisterController : ControllerBase
 {
 	private readonly ILogger<RegisterController> _logger;
 	private readonly IQueueProducer _queueProducer;
-    public RegisterController(ILogger<RegisterController> logger, IQueueProducer queueProducer)
+    private readonly IRegisterService _registerService;
+    public RegisterController(ILogger<RegisterController> logger, IQueueProducer queueProducer, IRegisterService registerService)
 	{
 		_logger = logger;
 		_queueProducer = queueProducer;
-
+        _registerService = registerService;
     }
 
     [HttpDelete]
-    public IActionResult DeleteRegister(int registerID)
+    public IActionResult DeleteRegister(int registerId)
     {
         try
         {
-            //_queueProducer.PublishMessage(register);
+            var register = new Register(registerId, string.Empty, null, DateTime.MinValue, "remove");
+            _queueProducer.PublishMessage(register);
 
             return Accepted();
         }
@@ -38,6 +41,7 @@ public class RegisterController : ControllerBase
     {
 		try
 		{
+            register.Action = "insert";
 			_queueProducer.PublishMessage(register);
 
 			return Accepted(register);
@@ -55,6 +59,7 @@ public class RegisterController : ControllerBase
     {
         try
         {
+            register.Action = "update";
             _queueProducer.PublishMessage(register);
 
             return Accepted(register);
@@ -71,9 +76,8 @@ public class RegisterController : ControllerBase
 	{
 		try
 		{
-
-			return Accepted(new List<Register> { });
-
+            var listRegister = _registerService.GetListAllAsync();
+			return Ok(listRegister);
 		}
 		catch (Exception ex)
 		{
@@ -88,7 +92,8 @@ public class RegisterController : ControllerBase
     {
         try
         {
-            return Accepted(new List<Register> { });
+            var register = _registerService.GetRegisterByIDAsync(registerId);
+            return Ok(register);
         }
         catch (Exception ex)
         {
@@ -96,6 +101,4 @@ public class RegisterController : ControllerBase
             return BadRequest(ex);
         }
     }
-
-
 }

@@ -28,7 +28,6 @@ public class EventStoreSqlContext : DbContext
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-        optionsBuilder.UseSqlServer(config.GetConnectionString("DefaultConnection"));
-
+        optionsBuilder.UseSqlServer(config.GetConnectionString("Default"));
     }
 }

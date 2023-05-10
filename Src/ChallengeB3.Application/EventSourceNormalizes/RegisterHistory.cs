@@ -1,4 +1,5 @@
 ﻿using ChallengeB3.Domain.Events;
+using ChallengeB3.Domain.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

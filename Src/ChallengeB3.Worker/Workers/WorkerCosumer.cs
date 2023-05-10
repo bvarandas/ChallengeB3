@@ -4,18 +4,24 @@ using RabbitMQ.Client.Events;
 using ChallengeB3.Domain.Models;
 using ChallengeB3.Domain.Extesions;
 using Microsoft.Extensions.Options;
+using ChallengeB3.Domain.CommandHandlers;
+using ChallengeB3.Domain.Bus;
+using ChallengeB3.Domain.Commands;
+using Microsoft.EntityFrameworkCore.Internal;
+using ChallengeB3.Domain.Interfaces;
 
 namespace ChallengeB3.Worker.Consumer.Workers;
 
 public class WorkerCosumer : BackgroundService
 {
-    private readonly IMediator _mediator;
+    private IRegisterService _registerService;
     private readonly ILogger<WorkerCosumer> _logger;
     private readonly QueueCommandSettings _queueSettings;
     private readonly ConnectionFactory _factory;
     private readonly IConnection _connection;
     private readonly IModel _channel;
-    public WorkerCosumer(IOptions<QueueCommandSettings> queueSettings, ILogger<WorkerCosumer> logger)
+    public WorkerCosumer(IOptions<QueueCommandSettings> queueSettings, 
+        ILogger<WorkerCosumer> logger, IRegisterService registerService)
     {
         _logger = logger;
         _queueSettings = queueSettings.Value;
@@ -25,6 +31,7 @@ public class WorkerCosumer : BackgroundService
         };
         _connection = _factory.CreateConnection();
         _channel = _connection.CreateModel();
+        _registerService = registerService;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -50,6 +57,17 @@ public class WorkerCosumer : BackgroundService
             var message = e.Body.ToArray().DeserializeFromByteArrayProtobuf<Register>();
             _logger.LogInformation($"{message.Description} | {message.Status} | {message.Date}");
 
+            switch(message.Action)
+            {
+                case "insert":
+                    _registerService.AddRegister
+                    _bus.SendCommand<InsertRegisterCommand>(message);
+                    break;
+                case "update":
+                    break;
+                case "remove":
+                    break;
+            }
 
             _channel.BasicAck(e.DeliveryTag, false);
 

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using ChallengeB3.Application.EventSourceNormalizes;
-using ChallengeB3.Application.ViewModel;
 using ChallengeB3.Domain.Bus;
 using ChallengeB3.Domain.Commands;
 using ChallengeB3.Domain.Interfaces;
@@ -36,7 +35,9 @@ public  class RegisterService : IRegisterService
         return await _registerRepository.GetRegisterByIDAsync(registerId);
     }
 
-    public async Task<RegisterCommand> AddRegisterAsync(RegisterViewModel register)
+    
+
+    public async Task<RegisterCommand> AddRegisterAsync(Register register)
     {
         var addCommand = _mapper.Map<InsertRegisterCommand>(register);
         await _bus.SendCommand(addCommand);
@@ -44,9 +45,9 @@ public  class RegisterService : IRegisterService
         return addCommand;
     }
 
-    public async Task<RegisterCommand> UpdateRegister(RegisterViewModel register)
+    public async Task<RegisterCommand> UpdateRegister(Register register)
     {
-        var updateCommand =  _mapper.Map<UpdateRegisterCommand>(register);
+        var updateCommand = _mapper.Map<UpdateRegisterCommand>(register);
         await _bus.SendCommand(updateCommand);
 
         return updateCommand;

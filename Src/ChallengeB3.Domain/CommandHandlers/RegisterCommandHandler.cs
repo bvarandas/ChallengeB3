@@ -32,13 +32,13 @@ public class RegisterCommandHandler : CommandHandler,
             NotifyValidationErrors(command);
             return await Task.FromResult(false);
         }
-        var register = new Register(command.Description, command.Status, command.Date);
+        var register = new Register(command.Description, command.Status, command.Date, command.Action);
 
         await _registerRepository.AddRegisterAsync(register);
 
         if (Commit())
         {
-            await _bus.RaiseEvent(new RegisterInsertedEvent(register.RegisterId, register.Description, register.Status, register.Date ));
+            await _bus.RaiseEvent(new RegisterInsertedEvent(register.RegisterId, register.Description, register.Status, register.Date , register.Action));
         }
 
         return await Task.FromResult(true);
@@ -51,7 +51,7 @@ public class RegisterCommandHandler : CommandHandler,
             NotifyValidationErrors(command);
             return await Task.FromResult(false);
         }
-        var register = new Register(command.RegisterId, command.Description, command.Status, command.Date);
+        var register = new Register(command.RegisterId, command.Description, command.Status, command.Date, command.Action);
 
         await _registerRepository.UpdateRegisterAsync(register);
 
