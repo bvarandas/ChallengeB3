@@ -5,7 +5,7 @@ namespace ChallengeB3.Api.Hubs;
 
 public class BrokerHub : Hub
 {
-    public Task ConnectToMessageBroker(string peste)
+    public Task ConnectToMessageBroker()
     {
         Groups.AddToGroupAsync(Context.ConnectionId, "CrudMessage");
 
