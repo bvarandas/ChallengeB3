@@ -26,3 +26,7 @@ CQRS - com Coreografia
 Injeção de depedencia
 Unit of Work
 Alguns conceitos de solid tbm foram usados.
+
+Rodar o docker do rabbitMQ
+docker run -d --hostname rabbitserver --name rabbitmq-server -p 15672:15672 -p 5672:5672 rabbitmq:3-management
+
