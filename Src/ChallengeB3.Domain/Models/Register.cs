@@ -21,6 +21,8 @@ public sealed class Register
     [ProtoMember(4)]
     public DateTime Date { get; set; }
 
+    [NotMapped]
+    [ProtoMember(5)]
     public string Action { get; set; } =string.Empty;
 
     public Register(int registerId, string description, string status, DateTime date, string action)

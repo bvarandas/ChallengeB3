@@ -27,6 +27,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddAppConfiguration(config);
+builder.Services.AddSingleton<IQueueConsumer, QueueConsumer>();
 builder.Services.AddSingleton<IQueueProducer, QueueProducer>();
 
 //SignalR - Core
@@ -49,6 +50,7 @@ builder.Services.AddMediatR(cfg=>
 
 NativeInjectorBootStrapper.RegisterServices(builder.Services);
 
+
 builder.Services.AddCors(options => options.AddPolicy("CorsPolicy", builderc =>
 {
     builderc
@@ -63,6 +65,9 @@ builder.Services.AddCors(options => options.AddPolicy("CorsPolicy", builderc =>
 }));
 
 builder.Services.AddControllers();
+
+builder.Services.AddHostedService<QueueConsumer>();
+builder.Services.AddHostedService<QueueProducer>();
 
 var app = builder.Build();
 

@@ -1,6 +1,5 @@
 ﻿using ChallengeB3.Domain.Events;
 using ChallengeB3.Infra.Data.Repository.EventSourcing;
-using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 
 namespace ChallengeB3.Infra.Data.EventSourcing;
@@ -19,7 +18,7 @@ public class SqlEventStore : IEventStore
         var storedEvent = new StoredEvent(
                 theEvent,
                 serializedData,
-                "UsuarioLogado");
+                "bvarandas");
 
         _eventStoreRepository.Store(storedEvent);
     }

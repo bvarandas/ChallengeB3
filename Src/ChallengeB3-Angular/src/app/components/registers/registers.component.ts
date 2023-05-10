@@ -55,11 +55,28 @@ export class RegistersComponent {
 
     private registerOnServerEvents() : void {
       this._hubConnection.on('ReceiveMessage', 
-      (data: any)=> {
-        console.log( data.registerId);
-        console.log( data.description);
-        console.log( data.stats);
-        console.log( data.date);
+      (data: Register[])=> {
+        
+        this.registers = data;
+        //alert(data);
+        // for (var i = 0; i< data.length; i++)
+        // {
+        //   alert(data);
+        //}
+        //console.log(data);
+
+        //alert("Veio dados");
+
+        // data.forEach((value, index)=>
+        // {
+        //   alert(value);
+        
+        //   console.log( value.registerId);
+        //   console.log( value.description);
+        //   console.log( value.status);
+        //   console.log( value.date);
+        // });
+        
       });
     }
 

@@ -52,6 +52,33 @@ public class WorkerProducer : BackgroundService, IWorkerProducer
         }
     }
 
+    public async Task PublishMessages(List<Register> messageList)
+    {
+        try
+        {
+            var body = messageList.SerializeToByteArrayProtobuf();
+
+            _channel.QueueDeclare(
+            queue: _queueSettings.QueueName,
+            durable: false,
+            exclusive: false,
+            autoDelete: false,
+            arguments: null);
+
+            _channel.BasicPublish(
+                exchange: string.Empty,
+                routingKey: _queueSettings.QueueName,
+                basicProperties: null,
+                body: body);
+
+        }
+        catch (Exception ex)
+        {
+            //_channel.
+            _logger.LogError(ex, $"{ex.Message}");
+        }
+    }
+
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         while (!stoppingToken.IsCancellationRequested)

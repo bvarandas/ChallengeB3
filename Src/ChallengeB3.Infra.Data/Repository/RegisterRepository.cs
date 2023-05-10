@@ -31,7 +31,17 @@ public class RegisterRepository: IRegisterRepository
 
     public async Task<IEnumerable<Register>> GetAllRegisterAsync()
     {
-        return await _dbContext.Registers.ToListAsync();
+        var  registerList = new List<Register>();
+        try
+        {
+            registerList =  await _dbContext.Registers.ToListAsync();
+
+        }catch (Exception ex)
+        {
+
+        }
+
+        return registerList;
     }
 
     public async Task<Register> GetRegisterByIDAsync(int registerId)

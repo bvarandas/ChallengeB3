@@ -3,9 +3,10 @@ using RabbitMQ.Client;
 using ChallengeB3.Domain.Extesions;
 using ChallengeB3.Domain.Models;
 using Microsoft.Extensions.Options;
+
 namespace ChallengeB3.Api.Producer;
 
-public class QueueProducer : IQueueProducer
+public class QueueProducer : BackgroundService, IQueueProducer
 {
     private readonly QueueCommandSettings _queueSettings;
     private readonly ConnectionFactory _factory;
@@ -54,6 +55,15 @@ public class QueueProducer : IQueueProducer
         {
             _logger.LogError(ex, $"{ex.Message}");
             return Task.FromException(ex);
+        }
+    }
+
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        while (!stoppingToken.IsCancellationRequested)
+        {
+            //_logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+            await Task.Delay(_queueSettings.Interval, stoppingToken);
         }
     }
 }

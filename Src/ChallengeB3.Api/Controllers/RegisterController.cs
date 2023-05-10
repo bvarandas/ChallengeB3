@@ -1,6 +1,7 @@
 ﻿using ChallengeB3.Domain.Interfaces;
 using ChallengeB3.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Win32;
 using System;
 
 namespace ChallengeB3.Api.Controllers;
@@ -73,11 +74,13 @@ public class RegisterController : ControllerBase
 
     [HttpGet]
 	public IActionResult GetListRegister()
-	{
-		try
+    {
+        try
 		{
-            var listRegister = _registerService.GetListAllAsync();
-			return Ok(listRegister);
+            var register = new Register() { Action = "getall" };
+            _queueProducer.PublishMessage(register);
+            
+			return Ok();
 		}
 		catch (Exception ex)
 		{
@@ -92,8 +95,9 @@ public class RegisterController : ControllerBase
     {
         try
         {
-            var register = _registerService.GetRegisterByIDAsync(registerId);
-            return Ok(register);
+            var register = new Register() { Action = "get", RegisterId=registerId };
+            _queueProducer.PublishMessage(register);
+            return Ok();
         }
         catch (Exception ex)
         {

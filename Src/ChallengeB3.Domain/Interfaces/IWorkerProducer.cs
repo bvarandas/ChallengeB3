@@ -4,4 +4,5 @@ namespace ChallengeB3.Domain.Interfaces;
 public interface IWorkerProducer
 {
     Task PublishMessage(Register message);
+    Task PublishMessages(List<Register> message);
 }

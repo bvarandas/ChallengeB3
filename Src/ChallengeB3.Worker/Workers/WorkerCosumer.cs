@@ -12,16 +12,18 @@ using ChallengeB3.Domain.Interfaces;
 
 namespace ChallengeB3.Worker.Consumer.Workers;
 
-public class WorkerCosumer : BackgroundService
+public class WorkerCosumer : BackgroundService, IWorkerConsumer
 {
-    private IRegisterService _registerService;
+    private readonly IWorkerProducer _workerProducer;
+    private readonly IRegisterService _registerService;
     private readonly ILogger<WorkerCosumer> _logger;
     private readonly QueueCommandSettings _queueSettings;
     private readonly ConnectionFactory _factory;
     private readonly IConnection _connection;
     private readonly IModel _channel;
     public WorkerCosumer(IOptions<QueueCommandSettings> queueSettings, 
-        ILogger<WorkerCosumer> logger, IRegisterService registerService)
+        ILogger<WorkerCosumer> logger, IRegisterService registerService,
+        IWorkerProducer workerProducer)
     {
         _logger = logger;
         _queueSettings = queueSettings.Value;
@@ -32,6 +34,7 @@ public class WorkerCosumer : BackgroundService
         _connection = _factory.CreateConnection();
         _channel = _connection.CreateModel();
         _registerService = registerService;
+        _workerProducer = workerProducer;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -50,7 +53,7 @@ public class WorkerCosumer : BackgroundService
         }
     }
 
-    private void Consumer_Received(object sender, BasicDeliverEventArgs e)
+    private async void Consumer_Received(object sender, BasicDeliverEventArgs e)
     {
         try
         {
@@ -60,13 +63,27 @@ public class WorkerCosumer : BackgroundService
             switch(message.Action)
             {
                 case "insert":
-                    _registerService.AddRegister
-                    _bus.SendCommand<InsertRegisterCommand>(message);
+                    await _registerService.AddRegisterAsync(message);
                     break;
+
                 case "update":
+                    await _registerService.UpdateRegisterAsync(message);
                     break;
+
                 case "remove":
+                    _registerService.RemoveRegisterAsync(message.RegisterId);
                     break;
+
+                case "getall":
+                    var registerlist = await _registerService.GetListAllAsync();
+                    await _workerProducer.PublishMessages(registerlist.ToList());
+                    break;
+
+                case "get":
+                    var register = await _registerService.GetRegisterByIDAsync(message.RegisterId);
+                    await _workerProducer.PublishMessage(register);
+                    break;
+
             }
 
             _channel.BasicAck(e.DeliveryTag, false);

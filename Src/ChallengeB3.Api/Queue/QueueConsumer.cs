@@ -4,12 +4,13 @@ using ChallengeB3.Domain.Interfaces;
 using ChallengeB3.Domain.Models;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
 namespace ChallengeB3.Api.Producer
 {
-    public class QueueConsumer : IQueueConsumer
+    public class QueueConsumer : BackgroundService, IQueueConsumer
     {
         private readonly ILogger<QueueConsumer> _logger;
         private readonly QueueEventSettings _queueSettings;
@@ -33,7 +34,7 @@ namespace ChallengeB3.Api.Producer
             _serviceProvider = provider;
         }
 
-        public async Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation("Aguardando mensagens Event...");
             
@@ -54,15 +55,19 @@ namespace ChallengeB3.Api.Producer
         {
             try
             {
-                var message = e.Body.ToArray().DeserializeFromByteArrayProtobuf<Register>();
-                _logger.LogInformation($"{message.Description} | {message.Status} | {message.Date}");
+
+                var messageList = e.Body.ToArray().DeserializeFromByteArrayProtobuf<List<Register>>();
+
+                //_logger.LogInformation($"{message.Description} | {message.Status} | {message.Date}");
+                //var message = messageList.FirstOrDefault();
 
                 using (var scope = _serviceProvider.CreateScope())
                 {
                     var hubContext = scope.ServiceProvider
                         .GetRequiredService<IHubContext<BrokerHub>>();
 
-                    hubContext.Clients.Group("CrudMessage").SendAsync("ReceiveMessage", message);
+                    //hubContext.Clients.Group("CrudMessage").SendAsync("ReceiveMessage", System.Text.Json.JsonSerializer.Serialize(messageList));
+                    hubContext.Clients.Group("CrudMessage").SendAsync("ReceiveMessage", messageList);
                 }
 
                 _channel.BasicAck(e.DeliveryTag, false);

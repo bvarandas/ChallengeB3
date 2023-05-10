@@ -45,7 +45,7 @@ public  class RegisterService : IRegisterService
         return addCommand;
     }
 
-    public async Task<RegisterCommand> UpdateRegister(Register register)
+    public async Task<RegisterCommand> UpdateRegisterAsync(Register register)
     {
         var updateCommand = _mapper.Map<UpdateRegisterCommand>(register);
         await _bus.SendCommand(updateCommand);
@@ -53,7 +53,7 @@ public  class RegisterService : IRegisterService
         return updateCommand;
     }
 
-    public async void RemoveRegister(int registerId)
+    public async void RemoveRegisterAsync(int registerId)
     {
         var deleteCommand = new RemoveRegisterCommand(registerId);
         await _bus.SendCommand(deleteCommand);
