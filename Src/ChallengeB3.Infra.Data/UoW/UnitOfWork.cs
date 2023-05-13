@@ -14,7 +14,16 @@ public class UnitOfWork : IUnitOfWork
 
     public bool Commit()
     {
-        return _dbContext.SaveChanges() > 0;
+        bool trySave = false;
+        try
+        {
+            trySave = _dbContext.SaveChanges() > 0;
+        }
+        catch (Exception ex)
+        {
+
+        }
+        return trySave;
     }
 
     public void Dispose()

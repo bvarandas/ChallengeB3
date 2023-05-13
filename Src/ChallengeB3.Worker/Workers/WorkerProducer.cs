@@ -9,20 +9,40 @@ using System.Runtime.CompilerServices;
 
 namespace ChallengeB3.Worker.Consumer.Workers;
 
-public class WorkerProducer : BackgroundService, IWorkerProducer
+public class WorkerProducer :  IWorkerProducer
 {
     private readonly ILogger<WorkerProducer> _logger;
     private readonly QueueEventSettings _queueSettings;
     private readonly ConnectionFactory _factory;
     private readonly IModel _channel;
     private readonly IConnection _connection;
+
+    private static WorkerProducer _instance;
+
+    public static WorkerProducer  _Singleton
+    {
+        get
+        {
+            return _instance;
+        }
+
+    }
+
     public WorkerProducer(IOptions<QueueEventSettings> queueSettings, ILogger<WorkerProducer> logger)
     {
-        _logger = logger;
-        _queueSettings = queueSettings.Value;
-        _factory = new ConnectionFactory { HostName = _queueSettings.HostName };
-        _connection = _factory.CreateConnection();
-        _channel = _connection.CreateModel();
+        try
+        {
+            _logger = logger;
+            _queueSettings = queueSettings.Value;
+            _factory = new ConnectionFactory { HostName = _queueSettings.HostName };
+            _connection = _factory.CreateConnection();
+            _channel = _connection.CreateModel();
+            _instance = this;
+        }catch (Exception ex)
+        {
+
+        }
+
     }
 
     public async Task PublishMessage(Register message)
@@ -79,7 +99,7 @@ public class WorkerProducer : BackgroundService, IWorkerProducer
         }
     }
 
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    public  async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         while (!stoppingToken.IsCancellationRequested)
         {

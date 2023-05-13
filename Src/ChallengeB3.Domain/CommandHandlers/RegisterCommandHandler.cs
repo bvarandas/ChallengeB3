@@ -63,22 +63,22 @@ public class RegisterCommandHandler : CommandHandler,
         return await Task.FromResult(true);
     }
 
-    public async Task<bool> Handle(RemoveRegisterCommand command, CancellationToken cancellationToken)
+    public Task<bool> Handle(RemoveRegisterCommand command, CancellationToken cancellationToken)
     {
         if (!command.IsValid())
         {
             NotifyValidationErrors(command);
-            return await Task.FromResult(false);
+            return Task.FromResult(false);
         }
 
-        await _registerRepository.DeleteRegisterAsync(command.RegisterId);
+        _registerRepository.DeleteRegisterAsync(command.RegisterId);
 
         if (Commit())
         {
-            await _bus.RaiseEvent(new RegisterRemovedEvent(command.RegisterId));
+            _bus.RaiseEvent(new RegisterRemovedEvent(command.RegisterId));
         }
 
-        return await Task.FromResult(true);
+        return Task.FromResult(true);
     }
     public void Dispose()
     {

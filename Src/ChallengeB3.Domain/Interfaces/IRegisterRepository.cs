@@ -8,5 +8,5 @@ public interface IRegisterRepository : IDisposable
     public Task AddRegisterAsync(Register register);
     public Task UpdateRegisterAsync(Register register);
     public Task<IEnumerable<Register>> GetAllRegisterAsync();
-    public Task DeleteRegisterAsync(int registerId);
+    public void DeleteRegisterAsync(int registerId);
 }

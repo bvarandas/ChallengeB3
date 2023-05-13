@@ -12,17 +12,18 @@ using ChallengeB3.Domain.Interfaces;
 
 namespace ChallengeB3.Worker.Consumer.Workers;
 
-public class WorkerCosumer : BackgroundService, IWorkerConsumer
+public class WorkerConsumer : BackgroundService, IWorkerConsumer
 {
     private readonly IWorkerProducer _workerProducer;
     private readonly IRegisterService _registerService;
-    private readonly ILogger<WorkerCosumer> _logger;
+    private readonly ILogger<WorkerConsumer> _logger;
     private readonly QueueCommandSettings _queueSettings;
     private readonly ConnectionFactory _factory;
     private readonly IConnection _connection;
     private readonly IModel _channel;
-    public WorkerCosumer(IOptions<QueueCommandSettings> queueSettings, 
-        ILogger<WorkerCosumer> logger, IRegisterService registerService,
+    
+    public WorkerConsumer(IOptions<QueueCommandSettings> queueSettings, 
+        ILogger<WorkerConsumer> logger, IRegisterService registerService,
         IWorkerProducer workerProducer)
     {
         _logger = logger;
@@ -46,9 +47,9 @@ public class WorkerCosumer : BackgroundService, IWorkerConsumer
 
         _channel.BasicConsume(queue: _queueSettings.QueueName, autoAck: false, consumer: consumer);
 
+
         while (!stoppingToken.IsCancellationRequested)
         {
-            //_logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
             await Task.Delay(_queueSettings.Interval, stoppingToken);
         }
     }
@@ -76,12 +77,14 @@ public class WorkerCosumer : BackgroundService, IWorkerConsumer
 
                 case "getall":
                     var registerlist = await _registerService.GetListAllAsync();
-                    await _workerProducer.PublishMessages(registerlist.ToList());
+                    await WorkerProducer._Singleton.PublishMessages(registerlist.ToList());
                     break;
 
                 case "get":
                     var register = await _registerService.GetRegisterByIDAsync(message.RegisterId);
-                    await _workerProducer.PublishMessage(register);
+                    var list = new List<Register>();
+                    list.Add(register);
+                    await WorkerProducer._Singleton.PublishMessages(list);
                     break;
 
             }

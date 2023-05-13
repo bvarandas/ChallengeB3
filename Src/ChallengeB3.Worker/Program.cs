@@ -70,13 +70,12 @@ try
             services.AddSingleton<IEventStore, SqlEventStore>();
             services.AddSingleton<EventStoreSqlContext>();
 
+            //services.AddHostedService<WorkerProducer>();
+
+            services.AddHostedService<WorkerConsumer>();
+
             services.AddSingleton<IWorkerProducer, WorkerProducer>();
-
-            services.AddHostedService<WorkerCosumer>();
-            services.AddHostedService<WorkerProducer>();
-
             
-            //services.AddSingleton<IWorkerConsumer, WorkerCosumer>();
             services.AddAutoMapperSetup();
 
             services.AddMediatR(cfg =>

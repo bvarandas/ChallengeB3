@@ -48,7 +48,7 @@ builder.Services.AddMediatR(cfg=>
     cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()); 
 });
 
-NativeInjectorBootStrapper.RegisterServices(builder.Services);
+//NativeInjectorBootStrapper.RegisterServices(builder.Services);
 
 
 builder.Services.AddCors(options => options.AddPolicy("CorsPolicy", builderc =>
@@ -66,7 +66,7 @@ builder.Services.AddCors(options => options.AddPolicy("CorsPolicy", builderc =>
 
 builder.Services.AddControllers();
 
-builder.Services.AddHostedService<QueueConsumer>();
+builder.Services.AddSingleton<IQueueConsumer, QueueConsumer>();
 builder.Services.AddHostedService<QueueProducer>();
 
 var app = builder.Build();

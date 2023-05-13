@@ -55,31 +55,8 @@ export class RegistersComponent {
 
     private registerOnServerEvents() : void {
       this._hubConnection.on('ReceiveMessage', 
-      (data: Register[])=> {
-        
-        this.registers = data;
-        //alert(data);
-        // for (var i = 0; i< data.length; i++)
-        // {
-        //   alert(data);
-        //}
-        //console.log(data);
-
-        //alert("Veio dados");
-
-        // data.forEach((value, index)=>
-        // {
-        //   alert(value);
-        
-        //   console.log( value.registerId);
-        //   console.log( value.description);
-        //   console.log( value.status);
-        //   console.log( value.date);
-        // });
-        
-      });
+      (data: Register[])=> { this.registers = data; });
     }
-
 
   ngOnInit(): void{
 
@@ -95,7 +72,7 @@ export class RegistersComponent {
     this.visibilidadeFormulario = true;
 
     this.registersService.GetById(registerId).subscribe((resultado)=>{
-      this.tituloFormulario = `Atualizar ${resultado.description}`;
+      //this.tituloFormulario = `Atualizar ${resultado.description}`;
 
       this.formulario = new FormGroup({
         registerId: new FormControl(resultado.registerId),
@@ -163,7 +140,7 @@ export class RegistersComponent {
       this.modalRef.hide();
       alert("Registro excluído com sucesso");
       this.registersService.GetAll().subscribe((registros)=>{
-        this.registers = registros;
+        //this.registers = registros;
       });
     });
   }

@@ -12,15 +12,20 @@ public class RegisterController : ControllerBase
 {
 	private readonly ILogger<RegisterController> _logger;
 	private readonly IQueueProducer _queueProducer;
-    private readonly IRegisterService _registerService;
-    public RegisterController(ILogger<RegisterController> logger, IQueueProducer queueProducer, IRegisterService registerService)
+    private readonly IQueueConsumer _queueConsumer;
+
+    public RegisterController(ILogger<RegisterController> logger, 
+        IQueueProducer queueProducer,
+        IQueueConsumer queueConsumer        )
 	{
 		_logger = logger;
 		_queueProducer = queueProducer;
-        _registerService = registerService;
+        _queueConsumer = queueConsumer;
+        //_registerService = registerService;
+        _queueConsumer.ExecuteAsync();
     }
 
-    [HttpDelete]
+    [HttpDelete("{registerId}")]
     public IActionResult DeleteRegister(int registerId)
     {
         try
@@ -96,8 +101,10 @@ public class RegisterController : ControllerBase
         try
         {
             var register = new Register() { Action = "get", RegisterId=registerId };
-            _queueProducer.PublishMessage(register);
-            return Ok();
+            //_queueProducer.PublishMessage(register);
+            //_registerService.GetRegisterByIDAsync(registerId);
+
+            return Ok(_queueConsumer.RegisterGetById(registerId));
         }
         catch (Exception ex)
         {

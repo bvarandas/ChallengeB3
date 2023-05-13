@@ -8,22 +8,40 @@ namespace ChallengeB3.Infra.Data.Repository;
 public class RegisterRepository: IRegisterRepository
 {
     protected readonly DbContextClass _dbContext;
-    
+    //protected readonly DbSet<Register> DbSet;
 
     public RegisterRepository(DbContextClass dbContext)
     {
         _dbContext = dbContext;
+        //DbSet = _dbContext.Set<Register>();
+        _dbContext.Registers = _dbContext.Set<Register>();
     }
 
     public async Task AddRegisterAsync(Register register)
     {
-        _dbContext.Registers.Add(register);
+        try
+        {
+            _dbContext.Registers.Add(register);
+        }catch (Exception ex)
+        {
+
+        }
     }
 
-    public async Task DeleteRegisterAsync(int registerId)
+    public void DeleteRegisterAsync(int registerId)
     {
-        var filtered = _dbContext.Registers.Where(x => x.RegisterId == registerId);
-        var result = _dbContext.Remove(filtered);
+        try
+        {
+            var filtered = _dbContext.Registers.Single(x => x.RegisterId == registerId);
+            var result = _dbContext.Remove(filtered);
+            _dbContext.SaveChanges();
+
+
+        }
+        catch (Exception ex)
+        {
+
+        }
         //_dbContext.SaveChanges();
 
         //return await Task<bool>.FromResult( result is not null ? true : false);
@@ -46,12 +64,37 @@ public class RegisterRepository: IRegisterRepository
 
     public async Task<Register> GetRegisterByIDAsync(int registerId)
     {
-        return await _dbContext.Registers.Where(x => x.RegisterId == registerId).FirstAsync();
+        Register? registerResult = new Register();
+        try
+        {
+            registerResult =  await _dbContext.Registers.Where(x => x.RegisterId == registerId).FirstAsync();
+        }catch(Exception ex)
+        {
+
+        }
+        return registerResult;
     }
 
     public async Task UpdateRegisterAsync(Register register)
     {
-        var result = _dbContext.Registers.Update(register);
+        try
+        {
+            var local = _dbContext.Registers.
+                FirstOrDefault(entry => entry.RegisterId.Equals(register.RegisterId));
+
+            if (local is not null)
+            {
+                _dbContext.Entry(local).State = EntityState.Detached;
+            }
+            
+            var result = _dbContext.Registers.Update(register);
+
+            _dbContext.Entry(register).State = EntityState.Modified;
+        }
+        catch (Exception ex)
+        {
+
+        }
         //bContext.SaveChanges();
         
         //return await Task.FromResult(result.Entity);
