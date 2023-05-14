@@ -24,11 +24,17 @@ Mediator
 
 Mais
 Ioc - Inversão de controle
+
 CQRS - com Coreografia
+
 Injeção de depedencia
+
 Unit of Work
+
 Event Sourcing
+
 Alguns conceitos de solid tbm foram usados.
+
 
 Rodar o docker do rabbitMQ
 
@@ -37,7 +43,8 @@ Modelo da arquitetura.
 
 ![Arq_ChallengeB3 (1)](https://github.com/bvarandas/ChallengeB3/assets/13907905/d31ae2cd-223c-48de-bb9f-a1b172d96843)
 
-![image](https://github.com/bvarandas/ChallengeB3/assets/13907905/ce855aa1-63b9-45f5-9b43-12ea7ad95afb)
+![image](https://github.com/bvarandas/ChallengeB3/assets/13907905/a59d4ac7-1746-4cf3-9f0b-198cc4578028)
+
 
 ![image](https://github.com/bvarandas/ChallengeB3/assets/13907905/4a69d490-3858-40e6-aaa6-1ec93e4b503e)
 
