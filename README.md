@@ -8,6 +8,8 @@ Arquitetura - Message/Event Driven e DDD
 Command-> Event
 Query-> Reply
 Usando  Filas do RabbiMQ para coreografia do ambiente.
+Protobuf para compactação no transporte.
+SignalR no response do para o client/Angular.
 
 DDD - modelagem de software que segue um conjunto de práticas com 
 objetivo de facilitar a implementação de complexas regras e processos de negócios que tratamos como domínio.
@@ -31,7 +33,9 @@ Alguns conceitos de solid tbm foram usados.
 Rodar o docker do rabbitMQ
 
 docker run -d --hostname rabbitserver --name rabbitmq-server -p 15672:15672 -p 5672:5672 rabbitmq:3-management
+Modelo da arquitetura.
 
+![Arq_ChallengeB3 (1)](https://github.com/bvarandas/ChallengeB3/assets/13907905/d31ae2cd-223c-48de-bb9f-a1b172d96843)
 
 ![image](https://github.com/bvarandas/ChallengeB3/assets/13907905/ce855aa1-63b9-45f5-9b43-12ea7ad95afb)
 
