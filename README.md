@@ -45,10 +45,10 @@ Modelo da arquitetura.
 
 ![image](https://github.com/bvarandas/ChallengeB3/assets/13907905/a59d4ac7-1746-4cf3-9f0b-198cc4578028)
 
+Event Source
 
-![image](https://github.com/bvarandas/ChallengeB3/assets/13907905/4a69d490-3858-40e6-aaa6-1ec93e4b503e)
+![image](https://github.com/bvarandas/ChallengeB3/assets/13907905/59c39874-8d82-46e5-a75c-a8a718203fcc)
 
-![image](https://github.com/bvarandas/ChallengeB3/assets/13907905/69ecb338-71f1-402b-a888-ca63a7b3055a)
 
 
 
