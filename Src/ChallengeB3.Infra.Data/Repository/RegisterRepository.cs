@@ -33,10 +33,7 @@ public class RegisterRepository: IRegisterRepository
         try
         {
             var filtered = _dbContext.Registers.Single(x => x.RegisterId == registerId);
-            var result = _dbContext.Remove(filtered);
-            _dbContext.SaveChanges();
-
-
+            _dbContext.Registers.Remove(filtered);
         }
         catch (Exception ex)
         {

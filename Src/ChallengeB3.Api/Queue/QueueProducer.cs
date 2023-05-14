@@ -23,6 +23,13 @@ public class QueueProducer : BackgroundService, IQueueProducer
             _factory = new ConnectionFactory { HostName = _queueSettings.HostName };
             _connection = _factory.CreateConnection();
             _channel = _connection.CreateModel();
+
+            _channel.QueueDeclare(
+            queue: _queueSettings.QueueName,
+            durable: false,
+            exclusive: false,
+            autoDelete: false,
+            arguments: null);
         }
         catch (Exception ex) 
         {
@@ -35,13 +42,6 @@ public class QueueProducer : BackgroundService, IQueueProducer
         try
         {
             var body = message.SerializeToByteArrayProtobuf();
-
-            _channel.QueueDeclare(
-            queue: _queueSettings.QueueName,
-            durable: false,
-            exclusive: false,
-            autoDelete: false,
-            arguments: null);
 
             _channel.BasicPublish(
                 exchange: string.Empty,

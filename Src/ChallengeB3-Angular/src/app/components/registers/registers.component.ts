@@ -5,6 +5,7 @@ import { Register } from 'src/app/Register';
 import { RegistersService } from 'src/app/registers.service';
 import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
 
+
 @Component({
   selector: 'app-registers',
   templateUrl: './registers.component.html',

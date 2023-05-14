@@ -30,19 +30,19 @@ public class WorkerProducer :  IWorkerProducer
 
     public WorkerProducer(IOptions<QueueEventSettings> queueSettings, ILogger<WorkerProducer> logger)
     {
-        try
-        {
-            _logger = logger;
-            _queueSettings = queueSettings.Value;
-            _factory = new ConnectionFactory { HostName = _queueSettings.HostName };
-            _connection = _factory.CreateConnection();
-            _channel = _connection.CreateModel();
-            _instance = this;
-        }catch (Exception ex)
-        {
+        _logger = logger;
+        _queueSettings = queueSettings.Value;
+        _factory = new ConnectionFactory { HostName = _queueSettings.HostName };
+        _connection = _factory.CreateConnection();
+        _channel = _connection.CreateModel();
+        _instance = this;
 
-        }
-
+        _channel.QueueDeclare(
+        queue: _queueSettings.QueueName,
+        durable: false,
+        exclusive: false,
+        autoDelete: false,
+        arguments: null);
     }
 
     public async Task PublishMessage(Register message)
@@ -50,13 +50,6 @@ public class WorkerProducer :  IWorkerProducer
         try
         {
             var body = message.SerializeToByteArrayProtobuf();
-
-            _channel.QueueDeclare(
-            queue: _queueSettings.QueueName,
-            durable: false,
-            exclusive: false,
-            autoDelete: false,
-            arguments: null);
 
             _channel.BasicPublish(
                 exchange: string.Empty,
@@ -67,7 +60,6 @@ public class WorkerProducer :  IWorkerProducer
         }
         catch (Exception ex)
         {
-            //_channel.
             _logger.LogError(ex, $"{ex.Message}");
         }
     }
