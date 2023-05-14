@@ -40,9 +40,9 @@ Rodar o docker do rabbitMQ
 
 docker run -d --hostname rabbitserver --name rabbitmq-server -p 15672:15672 -p 5672:5672 rabbitmq:3-management
 Modelo da arquitetura.
+![Arq_ChallengeB3](https://github.com/bvarandas/ChallengeB3/assets/13907905/3f5e852c-e0f7-4f5d-a46d-289813343551)
 
-![Arq_ChallengeB3 (1)](https://github.com/bvarandas/ChallengeB3/assets/13907905/d31ae2cd-223c-48de-bb9f-a1b172d96843)
-
+Dados Cadastrados
 ![image](https://github.com/bvarandas/ChallengeB3/assets/13907905/a59d4ac7-1746-4cf3-9f0b-198cc4578028)
 
 Event Source
