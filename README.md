@@ -38,10 +38,14 @@ Event Sourcing
 
 Alguns conceitos de solid tbm foram usados.
 
-
+Instruções para rodar
 Rodar o docker do rabbitMQ
 
 docker run -d --hostname rabbitserver --name rabbitmq-server -p 15672:15672 -p 5672:5672 rabbitmq:3-management
+
+rodar o script no mssql
+CreateDdbChallengeB3.sql
+
 Modelo da arquitetura.
 ![Arq_ChallengeB3](https://github.com/bvarandas/ChallengeB3/assets/13907905/3f5e852c-e0f7-4f5d-a46d-289813343551)
 
