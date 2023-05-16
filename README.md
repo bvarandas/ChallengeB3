@@ -46,6 +46,9 @@ docker run -d --hostname rabbitserver --name rabbitmq-server -p 15672:15672 -p 5
 rodar o script no mssql
 CreateDdbChallengeB3.sql
 
+Acesso Admin RabbitMQ
+http://localhost:15672/
+
 Modelo da arquitetura.
 ![Arq_ChallengeB3](https://github.com/bvarandas/ChallengeB3/assets/13907905/3f5e852c-e0f7-4f5d-a46d-289813343551)
 
