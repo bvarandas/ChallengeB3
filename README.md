@@ -18,14 +18,17 @@ DDD - modelagem de software que segue um conjunto de práticas com
 objetivo de facilitar a implementação de complexas regras e processos de negócios que tratamos como domínio.
 
 Padrões Criacionais usados:
+
 Factory
 Singleton
 
 Padrões Comportmentais
+
 Command
 Mediator 
 
 Mais
+
 Ioc - Inversão de controle
 
 CQRS - com Coreografia
